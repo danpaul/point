@@ -1,0 +1,19 @@
+{
+  "name": "point",
+  "version": "1.0.0",
+  "description": "A small module to manage geo points.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danpaul/point"
+  },
+  "author": "Dan Breczinski <pt2323@gmail.com> (https://github.com/danpaul)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danpaul/point/issues"
+  },
+  "homepage": "https://github.com/danpaul/point"
+}
