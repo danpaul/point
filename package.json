@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/danpaul/point/issues"
   },
-  "homepage": "https://github.com/danpaul/point"
+  "homepage": "https://github.com/danpaul/point",
+  "dependencies": {
+    "async": "^0.9.0",
+    "mongoose": "^4.0.0",
+    "underscore": "^1.8.2"
+  }
 }
