@@ -71,15 +71,11 @@ module.exports = function(options){
 
     self.findNear = function(longitude, latitude, kilometers, callbackIn){
 
-        var distance = kilometers / EARTH_CIRCUMFERENCE_IN_KILOMETERS
-
-        // get coordinates [ <longitude> , <latitude> ]
-        var coordinates = [longitude, latitude];
+        var maxDistance = kilometers / EARTH_CIRCUMFERENCE_IN_KILOMETERS
 
         // find a location
-        Point.find({ location: {
-                $near: coordinates,
-                $maxDistance: kilometers } })
+        Point.find({ location: { $near: [longitude, latitude],
+                                 $maxDistance: maxDistance } })
             .limit(MAX_POINTS_TO_RETURN)
             .exec(callbackIn)
     }

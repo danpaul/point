@@ -42,10 +42,11 @@ async.waterfall([
 
     function(callback){
 
-        point.findNear(2.17, 41.40, 100, function(err, points){
+        // point.findNear(2.17, 41.40, 100, function(err, points){
+        point.findNear(40.0, 41.40, 1, function(err, points){
             if( err ){ callback(err) }
             else{
-// console.log('asdf')
+console.log('asdf')
 console.log(points)
             }
         })
