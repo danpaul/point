@@ -4,34 +4,25 @@
 
 *******************************************************************************/
 
-// var geoLit = {}
-
-var DEFAULTS = {
-    mogoDbName: 'geo_lit_db',
-    mongoUrl: 'mongodb://localhost/geo_lit_db'
-}
+var EARTH_CIRCUMFERENCE_IN_KILOMETERS = 6371
+var MAX_POINTS_TO_RETURN = 100
 
 var _ = require('underscore')
-// var express = require('express')
-// var app = express()
-var async = require('async')
 var mongoose = require('mongoose')
-
-// var config = require('./config')
 
 var Schema = mongoose.Schema
 
-var MessageSchema = new Schema({  
-    name: String,
+var PointSchema = new Schema({
+    title: String,
     message: String,
-    _user: Schema.Types.ObjectId,
-    loc: {
+    user: {type: Number, index: true},
+    location: {
         type: [Number], // [<longitude>, <latitude>]
         index: '2d' // create the geospatial index
     }
 });
 
-var Message = mongoose.model('Message', MessageSchema)
+var Point = mongoose.model('point', PointSchema)
 
 /*******************************************************************************
 
@@ -44,41 +35,61 @@ module.exports = function(options){
     var self = this
 
     self.init = function(){
-
         mongoose.connect(options.mongoUrl, function(err) {  
             if( err ){ throw(err) }
         });
-
     }
 
-    // `messageData` should include: longitude, latitude, name, message, user
-    self.add = function(messageData, callbackIn){
 
-        var message = new Message({
-            name: messageData.name,
-            message: messageData.message,
-            _user: messageData._user,
-            loc: [messageData.longitude, messageData.latitude]
+    /**
+        locationData should look like this
+        {
+            title: 'some title',
+            message: 'some message',
+            user: 12233,
+            location: [2.17403, 41.40338] // longitude, latitude
+        }
+    */
+    self.add = function(locationData, callbackIn){
+        var point = new Point(locationData)
+        point.save(function(err){
+            if( err ){ callbackIn(err) }
+            else { callbackIn() }
         })
+    }
 
-        message.save(function(err){
-            if( err ){
-                callbackIn(err)
-            } else {
-                callbackIn()
-            }
-        })
+    self.delete = function(id){
+
     }
 
     self.findAll = function(callbackIn){
-        Message.find({}, function(err, docs){
-            if(err){
-                console.log(err)
-                return
-            }
-            console.log(docs)
-            callbackIn(docs)
+        Point.find({}, function(err, docs){
+            if(err){ console.log(err) }
+            else{ callbackIn(null, docs) }
         })
+    }
+
+    self.findNear = function(longitude, latitude, kilometers, callbackIn){
+
+        var distance = kilometers / EARTH_CIRCUMFERENCE_IN_KILOMETERS
+
+        // get coordinates [ <longitude> , <latitude> ]
+        var coordinates = [longitude, latitude];
+
+        // find a location
+        Point.find({ location: {
+                $near: coordinates,
+                $maxDistance: kilometers } })
+            .limit(MAX_POINTS_TO_RETURN)
+            .exec(callbackIn)
+    }
+
+    self.findUsers = function(userId, callbackIn){
+
+    }
+
+    self.holyGoodGodDontCallThis = function(callbackIn){
+        Point.remove({}, function(err){ callbackIn() })
     }
 
     self.init()

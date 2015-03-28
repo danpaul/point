@@ -1,40 +1,60 @@
-var GeoLit = require('../index')
+/*******************************************************************************
 
-var settings = {
-    mogoDbName: 'geo_lit_db',
-    mongoUrl: 'mongodb://localhost/geo_lit_db'
-}
+                    SETUP/DATA
 
-var geoLit = new GeoLit(settings)
+*******************************************************************************/
 
-geoLit.findAll(function(err, docs){
-    if(err){ console.log(err) }
+var async = require('async')
+
+var Point = require('../index')
+
+var point = new Point({ mongoUrl: 'mongodb://localhost/test_point_db' })
+
+var testPointData = {
+        title: 'some title',
+        message: 'some message',
+        user: 12233,
+        location: [2.17403, 41.40338] // longitude, latitude
+    }
+
+
+/*******************************************************************************
+
+                    TEST
+
+*******************************************************************************/
+
+async.waterfall([
+
+    point.holyGoodGodDontCallThis,
+
+    function(callback){
+
+        point.add(testPointData, callback)
+    },
+
+    point.findAll,
+
+    function(records, callback){
+        // console.log(records)
+        callback()
+    },
+
+    function(callback){
+
+        point.findNear(2.17, 41.40, 100, function(err, points){
+            if( err ){ callback(err) }
+            else{
+// console.log('asdf')
+console.log(points)
+            }
+        })
+    }
+
+
+], function(err){
+    if( err ){ console.log(err) }
     else{
-        console.log(docs)
+        console.log('success')
     }
 })
-
-// var geoLit = require('./geo_lit')
-
-// geoLit.init()
-
-// app.get('/', function(req, res){
-//     res.send('test')
-// })
-
-// var server = app.listen(3000, function () {
-
-//   var host = server.address().address
-//   var port = server.address().port
-
-//   console.log("Example app listening at http://%s:%s", host, port)
-
-// })
-
-// var message = {
-//     name: 'test name',
-//     message: 'tes message',
-//     _user: '77720695c652b0506ccdf346',
-//     longitude: 20.0002,
-//     latitude: 34.028383
-// }
