@@ -14,7 +14,6 @@ var Schema = mongoose.Schema
 
 var PointSchema = new Schema({
     title: String,
-    message: String,
     user: {type: Number, index: true},
     location: {
         type: [Number], // [<longitude>, <latitude>]
@@ -45,7 +44,6 @@ module.exports = function(options){
         locationData should look like this
         {
             title: 'some title',
-            message: 'some message',
             user: 12233,
             location: [2.17403, 41.40338] // longitude, latitude
         }

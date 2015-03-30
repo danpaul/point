@@ -12,7 +12,7 @@ var point = new Point({ mongoUrl: 'mongodb://localhost/test_point_db' })
 
 var testPointData = {
         title: 'some title',
-        message: 'some message',
+        // message: 'some message',
         user: 12233,
         location: [2.17403, 41.40338] // longitude, latitude
     }
