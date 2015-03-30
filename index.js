@@ -39,7 +39,6 @@ module.exports = function(options){
         });
     }
 
-
     /**
         locationData should look like this
         {
